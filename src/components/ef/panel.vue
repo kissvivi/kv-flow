@@ -38,6 +38,10 @@
             <div style="width: 230px;border-right: 1px solid #dce3e8;">
                 <node-menu @addNode="addNode" ref="nodeMenu"></node-menu>
             </div>
+
+            <div id="panzoom">
+
+            </div>
             <div id="efContainer" ref="efContainer" class="container" v-flowDrag>
                 <template ref="efTemplate" v-for="node in data.nodeList">
                     <flow-node :id="node.code" :key="node.code" :node="node" :activeElement="activeElement"
@@ -50,7 +54,7 @@
 
             <!-- 右侧表单 -->
             <div style="width: auto;border-left: 1px solid #dce3e8;background-color: #FBFBFB">
-                    <flow-node-form ref="nodeForm" @setLineLabel="setLineLabel"
+                <flow-node-form ref="nodeForm" :flowData="data" @setLineLabel="setLineLabel"
                     @repaintEverything="repaintEverything"></flow-node-form>
             </div>
         </div>
@@ -62,6 +66,7 @@
 </template>
 
 <script>
+import Panzoom from '@panzoom/panzoom'
 import draggable from 'vuedraggable'
 // import { jsPlumb } from 'jsplumb'
 // 使用修改后的jsplumb
@@ -81,6 +86,8 @@ import { getDataD } from './data_D'
 import { getDataE } from './data_E'
 import { ForceDirected } from './force-directed'
 import { getDataNow } from './data_now'
+import VueNativeSock from "vue-native-websocket";
+import Vue from "vue"
 
 export default {
     data() {
@@ -155,6 +162,15 @@ export default {
         }
     },
     mounted() {
+
+        //
+        const elem = document.getElementById('panzoom')
+        const panzoom = Panzoom(elem, {
+            maxScale: 5
+        })
+        panzoom.pan(10, 10)
+        panzoom.zoom(2, { animate: true })
+
         // // 关闭浏览器窗口的时候清空浏览器缓存在localStorage的数据
         // window.onbeforeunload = function (e) {
         //         var storage = window.localStorage;
@@ -700,7 +716,6 @@ export default {
 </script>
 
 <style>
-
 /*滚动条样式*/
 ::-webkit-scrollbar {
     width: 6px;
@@ -709,6 +724,7 @@ export default {
 
 ::-webkit-scrollbar-thumb {
     border-radius: 3px;
-    -webkit-box-shadow: inset 0 0 5px #a8a8a8a2; background: rgba(116, 113, 113, 0.082);
+    -webkit-box-shadow: inset 0 0 5px #a8a8a8a2;
+    background: rgba(116, 113, 113, 0.082);
 }
 </style>

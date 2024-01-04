@@ -1,7 +1,7 @@
 /*画布容器*/
 #efContainer {
     position: relative;
-    overflow: scroll;
+    /* overflow: scroll; */
     flex: 1;
 
     background-image: linear-gradient(to right, rgba(208, 208, 208, 0.2) 1px, transparent 1px),

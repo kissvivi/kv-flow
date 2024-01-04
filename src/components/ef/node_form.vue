@@ -81,6 +81,9 @@ import { cloneDeep } from 'lodash'
 import VueNativeSock from "vue-native-websocket";
 import Vue from "vue"
 export default {
+    props: {
+            flowData: Object,
+        },
     data() {
         return {
             logs: [],
@@ -112,7 +115,7 @@ export default {
     },
 
     mounted() {
-        Vue.use(VueNativeSock, "ws://localhost:8801/ws", {
+        Vue.use(VueNativeSock, "ws://localhost:10002/ws", {
             format: "json"
         });
 
@@ -121,7 +124,12 @@ export default {
             if (log.Action == "DagLog"){
                 this.logs.push(log);
             }
-            
+            if (log.Action == "DagControl"){
+                console.log("DagControl"+log.Msg)
+                if (log.Msg=='DAG_ALL_SUCCESS'&& log.FlowId == this.data.id){
+                    this.exeState = false
+                }
+            }
         };
     },
     watch: {
